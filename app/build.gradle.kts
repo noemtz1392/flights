@@ -8,14 +8,14 @@ plugins {
 
 android {
     namespace = "mx.com.test.android.aero"
-    compileSdk = 34
+    compileSdk = Project.COMPILE_SDK
 
     defaultConfig {
         applicationId = "mx.com.test.android.aero"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
+        minSdk = Project.MIN_SDK
+        targetSdk = Project.TARGET_SDK
+        versionCode = Project.VERSION_CODE
+        versionName = Project.VERSION_NAME
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

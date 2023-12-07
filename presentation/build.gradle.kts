@@ -8,10 +8,10 @@ plugins {
 
 android {
     namespace = "mx.com.test.android.presentation"
-    compileSdk = 34
+    compileSdk = Project.COMPILE_SDK
 
     defaultConfig {
-        minSdk = 24
+        minSdk = Project.MIN_SDK
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -26,10 +26,12 @@ android {
             )
         }
     }
+    
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = "17"
     }
