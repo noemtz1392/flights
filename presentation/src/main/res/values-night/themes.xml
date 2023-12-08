@@ -1,0 +1,8 @@
+<resources>
+
+    <style name="Theme.Shift" parent="Base.Theme.Shift">
+        <item name="colorPrimary">#FF000000</item>
+        <item name="colorPrimaryDark">#FF000000</item>
+        <item name="colorAccent">#00CEA9</item>
+    </style>
+</resources>

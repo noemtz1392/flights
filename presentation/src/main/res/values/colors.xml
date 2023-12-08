@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Status bar -->
+    <color name="color_status_bar">#33000000</color>
+
+    <color name="color_launcher_background">#FFF</color>
+</resources>

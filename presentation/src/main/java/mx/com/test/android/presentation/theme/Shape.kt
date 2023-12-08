@@ -32,8 +32,22 @@ val shapes = Shapes(
 )
 
 val shapeFlightStatus = RoundedCornerShape(
-    topStart = 0.dp,
-    topEnd = 0.dp,
-    bottomStart = 0.dp,
+    topStart = 8.dp,
+    topEnd = 8.dp,
+    bottomStart = 20.dp,
     bottomEnd = 20.dp
+)
+
+val shapeFlightDetail = RoundedCornerShape(
+    topStart = 16.dp,
+    topEnd = 16.dp,
+    bottomStart = 0.dp,
+    bottomEnd = 0.dp
+)
+
+val shapeDeparture = RoundedCornerShape(
+    topStart = 8.dp,
+    topEnd = 8.dp,
+    bottomStart = 8.dp,
+    bottomEnd = 8.dp
 )

@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="Base.Theme.Shift" parent="Theme.Material3.DayNight">
+        <item name="android:statusBarColor">@color/color_status_bar</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+    </style>
+</resources>

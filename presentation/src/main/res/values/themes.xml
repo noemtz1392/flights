@@ -1,0 +1,32 @@
+<resources>
+
+    <style name="Base.Theme.Shift" parent="Theme.Material3.DayNight">
+        <item name="android:statusBarColor">@color/color_status_bar</item>
+    </style>
+
+
+    <!-- Base application theme. -->
+    <style name="Theme.Shift" parent="Base.Theme.Shift">
+        <item name="colorPrimary">#FF000000</item>
+        <item name="colorPrimaryDark">#FF000000</item>
+        <item name="colorAccent">#00CEA9</item>
+        <item name="android:colorBackground">@android:color/white</item>
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+
+    <style name="Theme.Shift.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Shift.Launcher">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">#33000000</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <!--<item name="android:windowBackground">@drawable/launcher</item>-->
+    </style>
+
+    <style name="Theme.Shift.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+
+    <style name="Theme.Shift.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+</resources>
