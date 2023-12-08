@@ -28,7 +28,7 @@ import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -63,7 +63,8 @@ import mx.com.test.android.presentation.theme.shapeFlightStatus
 fun OutlinedCardExample(modifier: Modifier) {
     Card(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 16.dp),
         colors = CardDefaults.outlinedCardColors(),
         border = BorderStroke(1.5.dp, Color.Black),
         shape = RoundedCornerShape(12.dp)
@@ -71,7 +72,7 @@ fun OutlinedCardExample(modifier: Modifier) {
         Column(modifier = Modifier) {
             FlightStatus("On time")
             Itinerary()
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color(0X66000000))

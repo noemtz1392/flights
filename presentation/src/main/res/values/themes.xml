@@ -1,12 +1,12 @@
 <resources>
 
-    <style name="Base.Theme.Shift" parent="Theme.Material3.DayNight">
+    <style name="Base.Theme.Flights" parent="Theme.Material3.DayNight">
         <item name="android:statusBarColor">@color/color_status_bar</item>
     </style>
 
 
     <!-- Base application theme. -->
-    <style name="Theme.Shift" parent="Base.Theme.Shift">
+    <style name="Theme.Flights" parent="Base.Theme.Flights">
         <item name="colorPrimary">#FF000000</item>
         <item name="colorPrimaryDark">#FF000000</item>
         <item name="colorAccent">#00CEA9</item>
@@ -14,19 +14,19 @@
         <item name="android:windowBackground">@android:color/white</item>
     </style>
 
-    <style name="Theme.Shift.NoActionBar">
+    <style name="Theme.Flights.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Shift.Launcher">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">#33000000</item>
+    <style name="Theme.Flights.Launcher">
+        <item name="android:statusBarColor">@color/color_status_bar</item>
+        <item name="android:navigationBarColor">@color/color_status_bar</item>
         <item name="android:windowLightStatusBar">false</item>
         <!--<item name="android:windowBackground">@drawable/launcher</item>-->
     </style>
 
-    <style name="Theme.Shift.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+    <style name="Theme.Flights.AppBarOverlay" parent="ThemeOverlay.Material3.Dark.ActionBar" />
 
-    <style name="Theme.Shift.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+    <style name="Theme.Flights.PopupOverlay" parent="ThemeOverlay.Material3.Light" />
 </resources>

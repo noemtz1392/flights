@@ -1,4 +1,4 @@
-package mx.com.test.android.aero.ui.theme
+package mx.com.test.android.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

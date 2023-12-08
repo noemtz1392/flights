@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import mx.com.test.android.aero.ui.theme.FlightsTheme
 import mx.com.test.android.presentation.navigation.NavigationGraph
+import mx.com.test.android.presentation.theme.FlightsTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -21,13 +21,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            FlightApp { finish() }
+            FlightsApp { finish() }
         }
     }
 }
 
 @Composable
-fun FlightApp(finishActivity: () -> Unit) {
+fun FlightsApp(finishActivity: () -> Unit) {
     FlightsTheme {
         val navController = rememberNavController()
         Surface(
