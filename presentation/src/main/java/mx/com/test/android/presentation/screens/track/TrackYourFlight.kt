@@ -1,6 +1,5 @@
-package mx.com.test.android.presentation.screens
+package mx.com.test.android.presentation.screens.track
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -41,17 +40,18 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import mx.com.test.android.presentation.screens.FlightViewModel
 import mx.com.test.android.presentation.theme.garnettFontFamily
 import mx.com.test.android.presentation.theme.shapeDeparture
 import mx.com.test.android.presentation.utils.scrim
 
-
-@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun TrackYourFlightScreen(
     navController: NavController = rememberNavController(),
+    viewModel: FlightViewModel = hiltViewModel(),
     actionSearchFlight: () -> Unit
 ) {
     BoxWithConstraints(
@@ -110,7 +110,9 @@ fun TrackYourFlightScreen(
             }
         }
 
-        SearchFlightsByDestination{
+        SearchFlightsByDestination {
+            viewModel.trackFlightByNumberFlight("35")
+            //viewModel.trackFlightByDestination("MEX", "CUN")
             actionSearchFlight()
         }
     }

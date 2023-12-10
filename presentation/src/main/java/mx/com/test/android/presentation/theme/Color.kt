@@ -8,6 +8,8 @@ val color_light_onPrimary = Color(0xFFFFFFFF)
 val color_dark_primary = Color(0xFF4FD8EB)
 val color_dark_onPrimary = Color(0xFF00363D)
 
+val ColorDivider = Color(0X66000000)
+
 val InTheAir = Color(0xFF1872B3)
 val OnTime = Color(0XFF2E9509)
 val Delayed = Color(0XFFFECB2F)

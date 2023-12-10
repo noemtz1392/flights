@@ -1,4 +1,4 @@
-package mx.com.test.android.presentation.screens
+package mx.com.test.android.presentation.screens.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
@@ -16,8 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import mx.com.test.android.presentation.Itinerary
 import mx.com.test.android.presentation.R
 import mx.com.test.android.presentation.theme.garnettFontFamily
 import mx.com.test.android.presentation.theme.shapeDeparture
@@ -105,14 +104,14 @@ fun BoxScope.BottomSheetContent() {
         FlightStatus()
 
         Spacer(modifier = Modifier.width(24.dp))
-        Divider(
+        HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(0XFFE9E9E9))
                 .height(0.6.dp)
         )
-        Itinerary()
-        Divider(
+        //Itinerary()
+        HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
@@ -349,3 +348,4 @@ private fun Arrival() {
         }
     }
 }
+

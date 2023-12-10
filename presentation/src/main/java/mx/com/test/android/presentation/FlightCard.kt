@@ -1,14 +1,8 @@
 package mx.com.test.android.presentation
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,274 +13,147 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import mx.com.test.android.domain.models.Flight
+import mx.com.test.android.domain.models.FlightStatus
+import mx.com.test.android.presentation.components.Divider
+import mx.com.test.android.presentation.theme.Arrived
+import mx.com.test.android.presentation.theme.Delayed
+import mx.com.test.android.presentation.theme.FlightStatusShape
+import mx.com.test.android.presentation.theme.FlightsTheme
+import mx.com.test.android.presentation.theme.FlightsTheme.padding
+import mx.com.test.android.presentation.theme.InTheAir
+import mx.com.test.android.presentation.theme.OnTime
 import mx.com.test.android.presentation.theme.garnettFontFamily
-import mx.com.test.android.presentation.theme.shapeFlightStatus
+import mx.com.test.android.presentation.utils.dateToHoursAndMinutes
+import mx.com.test.android.presentation.utils.minutesToHoursAndMinutes
 
 @Composable
-fun OutlinedCardExample(modifier: Modifier) {
+fun OutlinedCardExample(flight: Flight) {
     Card(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 16.dp),
-        colors = CardDefaults.outlinedCardColors(),
+            .padding(
+                horizontal = padding.paddingNormal,
+                vertical = padding.paddingSmall
+            ),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = Color.White,
+            contentColor = Color.White
+        ),
         border = BorderStroke(1.5.dp, Color.Black),
-        shape = RoundedCornerShape(12.dp)
     ) {
-        Column(modifier = Modifier) {
-            FlightStatus("On time")
-            Itinerary()
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0X66000000))
-                    .height(0.6.dp)
-            )
-            FlightDetail()
+        Column(modifier = Modifier.fillMaxWidth()) {
+            FlightStatus(flight.status)
+            Itinerary(flight)
+            Divider(modifier = Modifier.fillMaxWidth())
+            FlightDetail(flight)
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FlightStatus(flightStatus: String) {
+fun FlightStatus(status: FlightStatus) {
     var switchState by remember { mutableStateOf(false) }
-    Row(modifier = Modifier.fillMaxWidth()) {
-        Box(
+    Row(
+        modifier = Modifier.padding(end = padding.paddingSmall),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Text(
+            text = status.name,
             modifier = Modifier
-                .background(Color(0XFF2E9509), shapeFlightStatus),
-        ) {
-            Text(
-                modifier = Modifier.padding(
-                    start = 16.dp,
-                    top = 4.dp,
-                    end = 16.dp,
-                    bottom = 4.dp
+                .background(status.background(), FlightStatusShape)
+                .padding(
+                    horizontal = padding.paddingNormal,
+                    vertical = padding.paddingSmall
                 ),
-                text = flightStatus,
-                fontSize = 14.sp,
-                fontFamily = garnettFontFamily,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.White
-            )
-        }
+            color = Color.White,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.SemiBold,
+            fontFamily = garnettFontFamily,
+        )
+
         Spacer(modifier = Modifier.weight(1f))
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 16.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Favorite",
+                text = stringResource(id = R.string.action_toggle_favorite),
                 color = Color.Black,
-                fontFamily = garnettFontFamily,
+                fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold,
+                fontFamily = garnettFontFamily,
             )
-            Switch(
-                checked = true,
-                onCheckedChange = { newState -> switchState = newState },
-                modifier = Modifier.padding(start = 8.dp)
-            )
-        }
-    }
-}
 
-@Composable
-fun Switch1(
-    scale: Float = 2f,
-    width: Dp = 36.dp,
-    height: Dp = 20.dp,
-    checkedTrackColor: Color = Color(0xFF35898F),
-    uncheckedTrackColor: Color = Color(0xFFe0e0e0),
-    thumbColor: Color = Color.White,
-    gapBetweenThumbAndTrackEdge: Dp = 4.dp
-) {
-
-    val switchON = remember {
-        mutableStateOf(true)
-    }
-
-    val thumbRadius = (height / 2) - gapBetweenThumbAndTrackEdge
-
-    // To move the thumb, we need to calculate the position (along x axis)
-    val animatePosition = animateFloatAsState(
-        targetValue = if (switchON.value)
-            with(LocalDensity.current) { (width - thumbRadius - gapBetweenThumbAndTrackEdge).toPx() }
-        else
-            with(LocalDensity.current) { (thumbRadius + gapBetweenThumbAndTrackEdge).toPx() }
-    )
-
-    Canvas(
-        modifier = Modifier
-            .size(width = width, height = height)
-            .scale(scale = scale)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = {
-                        // This is called when the user taps on the canvas
-                        switchON.value = !switchON.value
-                    }
+            CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
+                Switch(
+                    checked = true,
+                    onCheckedChange = { newState -> switchState = newState },
+                    modifier = Modifier.scale(.72f)
                 )
             }
-    ) {
-
-        // Track
-        drawRoundRect(
-            color = if (switchON.value) checkedTrackColor else uncheckedTrackColor,
-            cornerRadius = CornerRadius(x = 10.dp.toPx(), y = 10.dp.toPx())
-        )
-
-        // Thumb
-        drawCircle(
-            color = thumbColor,
-            radius = thumbRadius.toPx(),
-            center = Offset(
-                x = animatePosition.value,
-                y = size.height / 2
-            )
-        )
-
-    }
-
-    Spacer(modifier = Modifier.height(18.dp))
-
-    Text(text = if (switchON.value) "ON" else "OFF")
-}
-
-@Composable
-fun CustomSwitch(
-    width: Dp = 64.dp,
-    height: Dp = 40.dp,
-    checkedTrackColor: Color = Color(0xFF000000),
-    uncheckedTrackColor: Color = Color(0xFFD6D6D6),
-    gapBetweenThumbAndTrackEdge: Dp = 8.dp,
-    borderWidth: Dp = 1.dp,
-    cornerSize: Int = 50,
-    iconInnerPadding: Dp = 4.dp,
-    thumbSize: Dp = 24.dp
-) {
-
-    // this is to disable the ripple effect
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
-
-    // state of the switch
-    var switchOn by remember {
-        mutableStateOf(true)
-    }
-
-    // for moving the thumb
-    val alignment by animateAlignmentAsState(if (switchOn) 1f else -1f)
-
-    // outer rectangle with border
-    Box(
-        modifier = Modifier
-            .size(width = width, height = height)
-            .border(
-                width = borderWidth,
-                color = if (switchOn) checkedTrackColor else uncheckedTrackColor,
-                shape = RoundedCornerShape(percent = cornerSize)
-            )
-            .clickable(
-                indication = null,
-                interactionSource = interactionSource
-            ) {
-                switchOn = !switchOn
-            },
-        contentAlignment = Alignment.Center
-    ) {
-
-        // this is to add padding at the each horizontal side
-        Box(
-            modifier = Modifier
-                .padding(
-                    start = gapBetweenThumbAndTrackEdge,
-                    end = gapBetweenThumbAndTrackEdge
-                )
-                .fillMaxSize(),
-            contentAlignment = alignment
-        ) {
-
-            // thumb with icon
-            Icon(
-                imageVector = if (switchOn) Icons.Filled.Done else Icons.Filled.Close,
-                contentDescription = if (switchOn) "Enabled" else "Disabled",
-                modifier = Modifier
-                    .size(size = thumbSize)
-                    .background(
-                        color = if (switchOn) checkedTrackColor else uncheckedTrackColor,
-                        shape = CircleShape
-                    )
-                    .padding(all = iconInnerPadding),
-                tint = Color.White
-            )
         }
     }
 }
 
-@Composable
-private fun animateAlignmentAsState(
-    targetBiasValue: Float
-): State<BiasAlignment> {
-    val bias by animateFloatAsState(targetBiasValue, label = "")
-    return derivedStateOf { BiasAlignment(horizontalBias = bias, verticalBias = 0f) }
-}
-
 
 @Composable
-fun Itinerary() {
+fun Itinerary(flight: Flight) {
     Column(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier.padding(
+            start = padding.paddingNormal,
+            top = padding.paddingNormal,
+            end = padding.paddingNormal,
+            bottom = padding.paddingSmall
+        ),
     ) {
         Row(
-            modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "06:24",
+                text = flight.estimatedDepartureTime.dateToHoursAndMinutes(),
                 color = Color.Black,
-                fontFamily = garnettFontFamily,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 24.sp
+                fontFamily = garnettFontFamily,
             )
             Row(
                 modifier = Modifier
@@ -296,27 +163,35 @@ fun Itinerary() {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Icon(
+                    modifier = Modifier.padding(padding.paddingExtraSmall),
                     painter = painterResource(id = R.drawable.ic_dot_indicator),
-                    contentDescription = "Dot indicator origin", tint = Color.Black
+                    contentDescription = "Dot indicator departure",
+                    tint = Color.Black
                 )
-
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(2.dp)
+                        .background(Color.Black)
+                )
                 Image(
-                    painter = painterResource(id = R.drawable.ic_flight_indicator),
-                    contentDescription = "Flight indicator",
-
-                    )
+                    painter = painterResource(id = R.drawable.ic_flight),
+                    contentDescription = "Flight indicator"
+                )
                 Icon(
+                    modifier = Modifier.padding(padding.paddingExtraSmall),
                     painter = painterResource(id = R.drawable.ic_dot_indicator),
-                    contentDescription = "Dot indicator destination",
+                    contentDescription = "Dot indicator arrival",
                     tint = Color.Black
                 )
             }
 
             Text(
-                text = "09:21", color = Color.Black,
-                fontFamily = garnettFontFamily,
+                text = flight.estimatedArrivalTime.dateToHoursAndMinutes(),
+                color = Color.Black,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 24.sp
+                fontFamily = garnettFontFamily,
             )
         }
         Row(
@@ -324,35 +199,34 @@ fun Itinerary() {
             verticalAlignment = Alignment.Bottom
         ) {
             Text(
-                text = "MEX",
+                text = flight.segment.departureAirport,
                 color = Color.Black,
                 fontFamily = garnettFontFamily,
                 fontWeight = FontWeight.Light,
-                fontSize = 18.sp,
+                fontSize = 16.sp,
             )
             Text(
-
                 modifier = Modifier.weight(1f),
-                text = "2h 28m",
-                textAlign = TextAlign.Center,
+                text = flight.segment.flightDurationInMinutes.minutesToHoursAndMinutes(),
                 color = Color(0x66000000),
-                fontFamily = garnettFontFamily,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 13.sp,
+                fontFamily = garnettFontFamily,
+                textAlign = TextAlign.Center,
             )
             Text(
-                text = "CUN",
+                text = flight.segment.arrivalAirport,
                 color = Color.Black,
-                fontFamily = garnettFontFamily,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Light,
-                fontSize = 18.sp,
+                fontFamily = garnettFontFamily,
             )
         }
     }
 }
 
 @Composable
-fun FlightDetail() {
+fun FlightDetail(flight: Flight) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -361,21 +235,32 @@ fun FlightDetail() {
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "AM 504", fontSize = 15.sp,
+            text = flight.flightNumber, fontSize = 15.sp,
             fontFamily = garnettFontFamily,
             fontWeight = FontWeight.SemiBold,
             color = Color.Black
         )
         Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = "Details",
-            fontSize = 13.sp,
-            fontFamily = garnettFontFamily,
-            fontWeight = FontWeight.Normal,
-            color = Color.Black
-        )
+
+        ClickableText(
+            buildAnnotatedString {
+                withStyle(
+                    style = SpanStyle(
+                        color = Color.Black,
+                        fontSize = 12.0.sp,
+                        fontFamily = garnettFontFamily,
+                        fontWeight = FontWeight.Normal,
+                        textDecoration = TextDecoration.Underline
+                    )
+                ) {
+                    append("Details")
+                }
+            },
+        ) {
+
+        }
         Icon(
-            imageVector = Icons.Rounded.KeyboardArrowRight,
+            imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
             tint = MaterialTheme.colorScheme.primary,
             contentDescription = null,
             modifier = Modifier.size(ButtonDefaults.IconSize)
@@ -384,9 +269,31 @@ fun FlightDetail() {
     }
 }
 
+fun FlightStatus.background(): Color {
+    return when (this) {
+        FlightStatus.IN_THE_AIR -> InTheAir
+        FlightStatus.ON_TIME -> OnTime
+        FlightStatus.DELAYED -> Delayed
+        FlightStatus.ARRIVED -> Arrived
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewOutlinedCardExample() {
-    OutlinedCardExample(Modifier)
-
+    FlightsTheme {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            Column {
+                Spacer(modifier = Modifier.weight(1f))
+                FlightStatus(status = FlightStatus.ARRIVED)
+                Spacer(modifier = Modifier.height(16.dp))
+                FlightStatus(status = FlightStatus.ON_TIME)
+                Spacer(modifier = Modifier.height(16.dp))
+                FlightStatus(status = FlightStatus.IN_THE_AIR)
+                Spacer(modifier = Modifier.height(16.dp))
+                FlightStatus(status = FlightStatus.DELAYED)
+                Spacer(modifier = Modifier.weight(1f))
+            }
+        }
+    }
 }

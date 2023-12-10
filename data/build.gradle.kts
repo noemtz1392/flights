@@ -37,7 +37,6 @@ android {
 }
 
 dependencies {
-
     customImplementation(Dependencies.data)
     project(":domain")
 

@@ -7,12 +7,9 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import mx.com.test.android.domain.models.Flight
-import mx.com.test.android.domain.models.FlightStatus
-import mx.com.test.android.presentation.screens.FlightDetailScreen
-import mx.com.test.android.presentation.screens.FlightListScreen
-import mx.com.test.android.presentation.screens.TrackYourFlightScreen
-import java.util.UUID
+import mx.com.test.android.presentation.screens.detail.FlightDetailScreen
+import mx.com.test.android.presentation.screens.list.FlightListScreen
+import mx.com.test.android.presentation.screens.track.TrackYourFlightScreen
 
 @Composable
 fun NavigationGraph(
@@ -32,27 +29,7 @@ fun NavigationGraph(
             }
         }
         composable(route = NavigationRoutes.FlightList.route) {
-            val items = listOf(
-                Flight(
-                    UUID.randomUUID().toString(),
-                    status = FlightStatus.IN_THE_AIR
-                ),
-
-                Flight(
-                    UUID.randomUUID().toString(),
-                    status = FlightStatus.IN_THE_AIR
-                ),
-                Flight(
-                    UUID.randomUUID().toString(),
-                    status = FlightStatus.IN_THE_AIR
-                ),
-
-                Flight(
-                    UUID.randomUUID().toString(),
-                    status = FlightStatus.IN_THE_AIR
-                )
-            )
-            FlightListScreen(navController, items) {
+            FlightListScreen {
                 navController.navigate(NavigationRoutes.FlightDetail.route)
             }
         }
