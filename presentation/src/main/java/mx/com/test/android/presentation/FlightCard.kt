@@ -33,6 +33,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,7 +63,8 @@ import mx.com.test.android.presentation.utils.minutesToHoursAndMinutes
 @Composable
 fun OutlinedCardExample(
     flight: Flight,
-    navigateToDetail: (Flight) -> Unit
+    navigateToDetail: (Flight) -> Unit,
+    addToFavorite: (Flight) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -79,7 +81,7 @@ fun OutlinedCardExample(
         border = BorderStroke(1.5.dp, Color.Black),
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            FlightStatus(flight.status)
+            FlightStatus(flight, addToFavorite)
             Itinerary(flight)
             Divider(modifier = Modifier.fillMaxWidth())
             FlightDetail(flight, navigateToDetail)
@@ -89,16 +91,19 @@ fun OutlinedCardExample(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FlightStatus(status: FlightStatus) {
-    var switchState by remember { mutableStateOf(false) }
+fun FlightStatus(
+    flight: Flight,
+    addToFavorite: (Flight) -> Unit
+) {
+    var switchState by rememberSaveable { mutableStateOf(false) }
     Row(
         modifier = Modifier.padding(end = FlightsTheme.padding.paddingSmall),
         verticalAlignment = Alignment.Bottom
     ) {
         Text(
-            text = status.name,
+            text = flight.status.name,
             modifier = Modifier
-                .background(status.background(), FlightStatusShape)
+                .background(flight.status.background(), FlightStatusShape)
                 .padding(
                     horizontal = FlightsTheme.padding.paddingNormal,
                     vertical = FlightsTheme.padding.paddingSmall
@@ -124,8 +129,13 @@ fun FlightStatus(status: FlightStatus) {
 
             CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
                 Switch(
-                    checked = true,
-                    onCheckedChange = { newState -> switchState = newState },
+                    checked = switchState,
+                    onCheckedChange = { newState ->
+                        switchState = newState
+                        if (switchState) {
+                            addToFavorite(flight)
+                        }
+                    },
                     modifier = Modifier.scale(.72f)
                 )
             }

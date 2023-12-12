@@ -30,7 +30,7 @@ class FlightViewModel @Inject constructor(
     private val _searchUiState = MutableStateFlow(SearchUiState())
     val searchUiState: StateFlow<SearchUiState> = _searchUiState.asStateFlow()
 
-    fun searchFlightByFlightNumber(flightNumber: String = "35") {
+    fun searchFlightByFlightNumber(flightNumber: String = "500") {
         viewModelScope.launch {
             _searchUiState.update { it.copy(isSearching = true) }
             when (val result = searchByFlightNumberUseCase(flightNumber)) {

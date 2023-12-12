@@ -45,7 +45,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -55,12 +57,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import mx.com.test.android.domain.interactors.Route
 import mx.com.test.android.domain.models.Flight
 import mx.com.test.android.presentation.OutlinedCardExample
 import mx.com.test.android.presentation.R
 import mx.com.test.android.presentation.screens.FlightViewModel
 import mx.com.test.android.presentation.theme.FlightsTheme
 import mx.com.test.android.presentation.theme.garnettFontFamily
+import mx.com.test.android.presentation.utils.NotificationService
 
 
 @ExperimentalMaterial3Api
@@ -72,7 +76,7 @@ fun FlightListScreen(
     navigateToDetail: (Flight) -> Unit,
 ) {
     BackHandler(onBack = onBackPress)
-
+    val context = LocalContext.current
     val scrollState = rememberLazyListState()
     val topBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topBarState)
@@ -85,6 +89,8 @@ fun FlightListScreen(
                 modifier = Modifier.padding(end = FlightsTheme.padding.paddingNormal),
                 actions = {
                     DateContent(
+                        uiState.origin,
+                        uiState.destination,
                         flightNumber = uiState.flightNumber.orEmpty(),
                         departureDate = uiState.dateOfDeparture
                     )
@@ -105,7 +111,21 @@ fun FlightListScreen(
             FlightCards(
                 flightList = uiState.flights,
                 scrollState = scrollState,
-                navigateToDetail = navigateToDetail
+                navigateToDetail = navigateToDetail,
+                addToFavorite = {
+                    NotificationService(context).showNotification(
+                        id = it.segment.operatingFlightCode.toInt(),
+                        title = context.getString(
+                            R.string.title_notification_flight_add_to_favorites,
+                            it.flightNumber
+                        ),
+                        contentText = context.getString(
+                            R.string.content_text_notification_flight_add_to_favorites,
+                            it.flightNumber,
+                            it.segment.arrivalAirport,
+                        )
+                    )
+                }
             )
         }
     }
@@ -115,7 +135,8 @@ fun FlightListScreen(
 fun FlightCards(
     flightList: List<Flight>,
     scrollState: LazyListState,
-    navigateToDetail: (Flight) -> Unit
+    navigateToDetail: (Flight) -> Unit,
+    addToFavorite: (Flight) -> Unit
 ) {
     LazyColumn(
         state = scrollState,
@@ -129,7 +150,8 @@ fun FlightCards(
         items(flightList, key = { it.id }) { item ->
             OutlinedCardExample(
                 flight = item,
-                navigateToDetail = navigateToDetail
+                navigateToDetail = navigateToDetail,
+                addToFavorite = addToFavorite
             )
         }
     }
@@ -163,19 +185,19 @@ private fun AppBar(
 
 @Composable
 fun DateContent(
-    flightNumber: String,
+    origin: String? = null,
+    destination: String? = null,
+    flightNumber: String? = null,
     departureDate: String
 ) {
     Column(
         horizontalAlignment = Alignment.End
     ) {
-        Text(
-            text = flightNumber,
-            fontSize = 21.sp,
-            color = Color.Black,
-            fontFamily = garnettFontFamily,
-            fontWeight = FontWeight.SemiBold
-        )
+        if (origin != null && destination != null) {
+            RouteInfo(route = Route(origin, destination))
+        } else if (flightNumber != null) {
+            FlightNumberInfo(flightNumber = flightNumber)
+        }
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -228,16 +250,63 @@ fun NavigationBackIcon(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RouteInfo(route: Route) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = route.first,
+            color = Color.Black,
+            fontSize = 21.sp,
+            fontWeight = FontWeight.SemiBold,
+            fontFamily = garnettFontFamily
+        )
+        Icon(
+            painter = painterResource(id = R.drawable.ic_arrow_trip),
+            contentDescription = "",
+            modifier = Modifier.padding(horizontal = FlightsTheme.padding.paddingTooSmall)
+        )
+        Text(
+            text = route.second,
+            color = Color.Black,
+            fontSize = 21.sp,
+            fontWeight = FontWeight.SemiBold,
+            fontFamily = garnettFontFamily
+        )
+    }
+}
+
+@Composable
+private fun FlightNumberInfo(flightNumber: String) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = "AM",
+            color = Color.Black,
+            fontSize = 21.sp,
+            fontWeight = FontWeight.SemiBold,
+            fontFamily = garnettFontFamily
+        )
+        Spacer(
+            modifier = Modifier.width(FlightsTheme.spacing.spaceSmall)
+        )
+
+        Text(
+            text = flightNumber,
+            fontSize = 21.sp,
+            color = Color.Black,
+            fontFamily = garnettFontFamily,
+            fontWeight = FontWeight.SemiBold
+        )
+
+    }
+}
+
 @Preview(device = Devices.PHONE, showBackground = true)
 @Composable
 fun preview() {
     FlightsTheme {
-        AppBar(actions = {
-            DateContent(
-                "AM 600",
-                "Domingo, 10 Diciembre"
-            )
-        })
+        Column {
+            RouteInfo(route = Route("MEX", "CUN"))
+            FlightNumberInfo("540")
+        }
     }
 }
