@@ -1,6 +1,6 @@
 package mx.com.test.android.data.mappers
 
-import mx.com.test.android.data.ApiSegment
+import mx.com.test.android.data.api.ApiSegment
 import mx.com.test.android.domain.common.mapper.Mapper
 import mx.com.test.android.domain.models.Segment
 

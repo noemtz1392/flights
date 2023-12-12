@@ -1,11 +1,13 @@
 package mx.com.test.android.data.mappers
 
-import mx.com.test.android.data.ApiFlightStatus
+import mx.com.test.android.data.api.ApiFlightStatus
 import mx.com.test.android.domain.common.mapper.Mapper
 import mx.com.test.android.domain.models.Flight
 import mx.com.test.android.domain.models.FlightStatus
 
-class Api(private val mapper: ApiSegmentToSegmentMapper) : Mapper<ApiFlightStatus, Flight>() {
+class ApiFlightStatusToFlight(
+    private val mapper: ApiSegmentToSegmentMapper
+) : Mapper<ApiFlightStatus, Flight>() {
     override fun mapFrom(from: ApiFlightStatus): Flight = Flight(
         id = from.segment.segmentCode,
         status = FlightStatus.valueOf(from.status),

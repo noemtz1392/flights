@@ -3,6 +3,8 @@ package mx.com.test.android.presentation
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,16 +16,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -39,23 +40,19 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import mx.com.test.android.domain.models.Flight
 import mx.com.test.android.domain.models.FlightStatus
 import mx.com.test.android.presentation.components.Divider
+import mx.com.test.android.presentation.components.LinkButton
 import mx.com.test.android.presentation.theme.Arrived
 import mx.com.test.android.presentation.theme.Delayed
 import mx.com.test.android.presentation.theme.FlightStatusShape
 import mx.com.test.android.presentation.theme.FlightsTheme
-import mx.com.test.android.presentation.theme.FlightsTheme.padding
 import mx.com.test.android.presentation.theme.InTheAir
 import mx.com.test.android.presentation.theme.OnTime
 import mx.com.test.android.presentation.theme.garnettFontFamily
@@ -63,13 +60,16 @@ import mx.com.test.android.presentation.utils.dateToHoursAndMinutes
 import mx.com.test.android.presentation.utils.minutesToHoursAndMinutes
 
 @Composable
-fun OutlinedCardExample(flight: Flight) {
+fun OutlinedCardExample(
+    flight: Flight,
+    navigateToDetail: (Flight) -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                horizontal = padding.paddingNormal,
-                vertical = padding.paddingSmall
+                horizontal = FlightsTheme.padding.paddingNormal,
+                vertical = FlightsTheme.padding.paddingSmall
             ),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.outlinedCardColors(
@@ -82,7 +82,7 @@ fun OutlinedCardExample(flight: Flight) {
             FlightStatus(flight.status)
             Itinerary(flight)
             Divider(modifier = Modifier.fillMaxWidth())
-            FlightDetail(flight)
+            FlightDetail(flight, navigateToDetail)
         }
     }
 }
@@ -92,7 +92,7 @@ fun OutlinedCardExample(flight: Flight) {
 fun FlightStatus(status: FlightStatus) {
     var switchState by remember { mutableStateOf(false) }
     Row(
-        modifier = Modifier.padding(end = padding.paddingSmall),
+        modifier = Modifier.padding(end = FlightsTheme.padding.paddingSmall),
         verticalAlignment = Alignment.Bottom
     ) {
         Text(
@@ -100,8 +100,8 @@ fun FlightStatus(status: FlightStatus) {
             modifier = Modifier
                 .background(status.background(), FlightStatusShape)
                 .padding(
-                    horizontal = padding.paddingNormal,
-                    vertical = padding.paddingSmall
+                    horizontal = FlightsTheme.padding.paddingNormal,
+                    vertical = FlightsTheme.padding.paddingSmall
                 ),
             color = Color.White,
             fontSize = 12.sp,
@@ -138,10 +138,10 @@ fun FlightStatus(status: FlightStatus) {
 fun Itinerary(flight: Flight) {
     Column(
         modifier = Modifier.padding(
-            start = padding.paddingNormal,
-            top = padding.paddingNormal,
-            end = padding.paddingNormal,
-            bottom = padding.paddingSmall
+            start = FlightsTheme.padding.paddingNormal,
+            top = FlightsTheme.padding.paddingNormal,
+            end = FlightsTheme.padding.paddingNormal,
+            bottom = FlightsTheme.padding.paddingSmall
         ),
     ) {
         Row(
@@ -163,7 +163,7 @@ fun Itinerary(flight: Flight) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    modifier = Modifier.padding(padding.paddingExtraSmall),
+                    modifier = Modifier.padding(FlightsTheme.padding.paddingExtraSmall),
                     painter = painterResource(id = R.drawable.ic_dot_indicator),
                     contentDescription = "Dot indicator departure",
                     tint = Color.Black
@@ -179,7 +179,7 @@ fun Itinerary(flight: Flight) {
                     contentDescription = "Flight indicator"
                 )
                 Icon(
-                    modifier = Modifier.padding(padding.paddingExtraSmall),
+                    modifier = Modifier.padding(FlightsTheme.padding.paddingExtraSmall),
                     painter = painterResource(id = R.drawable.ic_dot_indicator),
                     contentDescription = "Dot indicator arrival",
                     tint = Color.Black
@@ -226,46 +226,45 @@ fun Itinerary(flight: Flight) {
 }
 
 @Composable
-fun FlightDetail(flight: Flight) {
+fun FlightDetail(
+    flight: Flight,
+    navigateToDetail: (Flight) -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp),
+            .padding(
+                horizontal = FlightsTheme.padding.paddingNormal,
+                vertical = FlightsTheme.padding.paddingSmall
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
-            text = flight.flightNumber, fontSize = 15.sp,
-            fontFamily = garnettFontFamily,
+            text = flight.flightNumber,
+            color = Color.Black,
+            fontSize = 15.sp,
             fontWeight = FontWeight.SemiBold,
-            color = Color.Black
+            fontFamily = garnettFontFamily,
         )
+
         Spacer(modifier = Modifier.weight(1f))
 
-        ClickableText(
-            buildAnnotatedString {
-                withStyle(
-                    style = SpanStyle(
-                        color = Color.Black,
-                        fontSize = 12.0.sp,
-                        fontFamily = garnettFontFamily,
-                        fontWeight = FontWeight.Normal,
-                        textDecoration = TextDecoration.Underline
-                    )
-                ) {
-                    append("Details")
-                }
-            },
+        Row(
+            modifier = Modifier.clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(bounded = true, color = Color.Black),
+                onClick = { navigateToDetail(flight) }
+            ), verticalAlignment = Alignment.CenterVertically
         ) {
-
+            LinkButton(text = stringResource(id = R.string.action_open_flight_details))
+            Icon(
+                imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                tint = Color.Black,
+                contentDescription = null,
+                modifier = Modifier.size(ButtonDefaults.IconSize)
+            )
         }
-        Icon(
-            imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-            tint = MaterialTheme.colorScheme.primary,
-            contentDescription = null,
-            modifier = Modifier.size(ButtonDefaults.IconSize)
-        )
-
     }
 }
 
@@ -285,14 +284,9 @@ fun PreviewOutlinedCardExample() {
         Surface(modifier = Modifier.fillMaxSize()) {
             Column {
                 Spacer(modifier = Modifier.weight(1f))
-                FlightStatus(status = FlightStatus.ARRIVED)
-                Spacer(modifier = Modifier.height(16.dp))
-                FlightStatus(status = FlightStatus.ON_TIME)
-                Spacer(modifier = Modifier.height(16.dp))
-                FlightStatus(status = FlightStatus.IN_THE_AIR)
-                Spacer(modifier = Modifier.height(16.dp))
-                FlightStatus(status = FlightStatus.DELAYED)
+
                 Spacer(modifier = Modifier.weight(1f))
+
             }
         }
     }

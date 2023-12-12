@@ -4,8 +4,8 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
 import mx.com.test.android.domain.common.ExceptionHandler
-import mx.com.test.android.domain.interactors.TrackFlightByFlightNumberUseCase
-import mx.com.test.android.domain.interactors.TrackFlightByRouteUseCase
+import mx.com.test.android.domain.interactors.SearchByFlightNumberUseCase
+import mx.com.test.android.domain.interactors.SearchFlightByRouteUseCase
 import mx.com.test.android.domain.repositories.FlightRepository
 
 @Module(includes = [CoroutinesModule::class])
@@ -13,9 +13,11 @@ object UseCaseModule {
 
     @Provides
     fun provideTrackFlightByDestinationUseCase(
-        @MainDispatcher dispatcher: CoroutineDispatcher,
+        repository: FlightRepository,
+        @IoDispatcher dispatcher: CoroutineDispatcher,
         handler: ExceptionHandler
-    ) = TrackFlightByRouteUseCase(
+    ) = SearchFlightByRouteUseCase(
+        repository = repository,
         exceptionHandler = handler,
         dispatcher = dispatcher
     )
@@ -24,9 +26,9 @@ object UseCaseModule {
     @Provides
     fun provideTrackFlightByNumberFlightUseCase(
         repository: FlightRepository,
-        @MainDispatcher dispatcher: CoroutineDispatcher,
+        @IoDispatcher dispatcher: CoroutineDispatcher,
         handler: ExceptionHandler
-    ) = TrackFlightByFlightNumberUseCase(
+    ) = SearchByFlightNumberUseCase(
         repository = repository,
         exceptionHandler = handler,
         dispatcher = dispatcher

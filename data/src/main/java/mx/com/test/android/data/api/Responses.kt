@@ -1,4 +1,4 @@
-package mx.com.test.android.data
+package mx.com.test.android.data.api
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

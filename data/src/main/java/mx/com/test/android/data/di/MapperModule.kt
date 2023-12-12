@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import mx.com.test.android.data.mappers.Api
+import mx.com.test.android.data.mappers.ApiFlightStatusToFlight
 import mx.com.test.android.data.mappers.ApiSegmentToSegmentMapper
 
 @Module
@@ -12,7 +12,7 @@ import mx.com.test.android.data.mappers.ApiSegmentToSegmentMapper
 object MapperModule {
 
     @Provides
-    fun provideApi(mapper: ApiSegmentToSegmentMapper): Api = Api(mapper)
+    fun provideApi(mapper: ApiSegmentToSegmentMapper): ApiFlightStatusToFlight = ApiFlightStatusToFlight(mapper)
 
     @Provides
     fun provideApiSegmentToSegmentMapper() = ApiSegmentToSegmentMapper()

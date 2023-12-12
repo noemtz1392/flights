@@ -7,12 +7,14 @@ import mx.com.test.android.domain.common.result.Result
 import mx.com.test.android.domain.models.Flight
 import mx.com.test.android.domain.repositories.FlightRepository
 
-class TrackFlightByFlightNumberUseCase(
+typealias FlightNumber = String
+
+class SearchByFlightNumberUseCase(
     private val repository: FlightRepository,
     exceptionHandler: ExceptionHandler,
     dispatcher: CoroutineDispatcher
-) : CoroutineUseCase<String, List<Flight>>(exceptionHandler, dispatcher) {
-    override suspend fun execute(param: String): Result<List<Flight>> {
-        return repository.trackFlightByFlightNumber()
+) : CoroutineUseCase<FlightNumber, List<Flight>>(exceptionHandler, dispatcher) {
+    override suspend fun execute(param: FlightNumber): Result<List<Flight>> {
+        return repository.searchByFlightNumber(flightNumber = param)
     }
 }

@@ -1,4 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--<string name="app_name">Flights</string>
+
     <string name="action_toggle_favorite">Favorito</string>
+    <string name="action_navigation_back">Regresar</string>
+    <string name="action_change_date">Cambiar</string>
+    <string name="action_open_flight_details">Detalles</string>
+    <string name="arrival_label">Llegada</string>
+    <string name="departure_label">Salida</string>
+    <string name="terminal_label">Terminal</string>
+    <string name="estimated_landing_label">Est. Landing</string>
+    <string name="departure_gate_label">Gate</string>
+    <string name="boarding_time_label">Boarding</string>
+    <string name="flight_details_label">Detalle del vuelo</string>
+
+    <string name="title_notification_flight_add_to_favorites">Vuelo %1$s agregado a favoritos</string>-->
+
+    <string name="app_name">Flights</string>
+
+    <string name="action_toggle_favorite">Favorite</string>
+    <string name="action_navigation_back">On Back</string>
+    <string name="action_change_date">Change</string>
+    <string name="action_open_flight_details">Details</string>
+    <string name="arrival_label">Arrival</string>
+    <string name="departure_label">Departure</string>
+    <string name="terminal_label">Terminal</string>
+    <string name="estimated_landing_label">Est. Landing</string>
+    <string name="departure_gate_label">Gate</string>
+    <string name="boarding_time_label">Boarding</string>
+    <string name="flight_details_label">Flight details</string>
+
+    <string name="title_notification_flight_add_to_favorites">Flight add to favorites</string>
 </resources>

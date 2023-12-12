@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Flights</string>
     <string name="action_toggle_favorite">Favorite</string>
+
+    <string name="action_navigation_back">On Back</string>
+    <string name="action_change_date">Change</string>
+    <string name="action_open_flight_details">Details</string>
+
+    <!--Flight Detail Screen-->
+    <string name="flight_details_label">Flight details</string>
+    <string name="departure_label">Departure</string>
+    <string name="arrival_label">Arrival</string>
+    <string name="terminal_label">Terminal</string>
+    <string name="departure_gate_label">Gate</string>
+    <string name="boarding_time_label">Boarding</string>
+    <string name="estimated_landing_label">Est. Landing</string>
+
+    <string name="terminal_number_label" translatable="false">Terminal %1$s</string>
+
+    <string name="title_notification_flight_add_to_favorites">Flight %1$s add to favorites</string>
+    <!---->
 </resources>

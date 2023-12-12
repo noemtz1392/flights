@@ -85,6 +85,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-core:1.5.4")
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
 
+    implementation("com.google.accompanist:accompanist-permissions:0.32.0")
 
 
 

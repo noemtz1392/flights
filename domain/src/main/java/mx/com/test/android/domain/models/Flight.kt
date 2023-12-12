@@ -13,6 +13,5 @@ data class Flight(
     val arrivalGate: String,
     val segment: Segment
 ) {
-
     val flightNumber = "${segment.operatingCarrier} ${segment.operatingFlightCode}"
 }

@@ -1,4 +1,4 @@
-package mx.com.test.android.data
+package mx.com.test.android.data.api
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

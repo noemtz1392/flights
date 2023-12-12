@@ -4,9 +4,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import mx.com.test.android.data.FakeDataRepository
-import mx.com.test.android.data.FlightApi
-import mx.com.test.android.data.mappers.Api
+import mx.com.test.android.data.api.FlightApi
+import mx.com.test.android.data.mappers.ApiFlightStatusToFlight
+import mx.com.test.android.data.repositories.FakeDataRepository
 import mx.com.test.android.domain.repositories.FlightRepository
 import javax.inject.Singleton
 
@@ -16,6 +16,6 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun provideFlightRepository(api: FlightApi, mapper: Api): FlightRepository =
+    fun provideFlightRepository(api: FlightApi, mapper: ApiFlightStatusToFlight): FlightRepository =
         FakeDataRepository(api = api, mapper = mapper)
 }

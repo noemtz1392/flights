@@ -5,8 +5,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import mx.com.test.android.domain.interactors.TrackFlightByFlightNumberUseCase
-import mx.com.test.android.domain.interactors.TrackFlightByRouteUseCase
+import mx.com.test.android.domain.interactors.SearchByFlightNumberUseCase
+import mx.com.test.android.domain.interactors.SearchFlightByRouteUseCase
 import mx.com.test.android.presentation.screens.FlightViewModel
 
 @Module
@@ -15,10 +15,10 @@ object TrackFlightModule {
     @Provides
     @ViewModelScoped
     fun bindsLoginViewModel(
-        trackFlightByFlightNumberUseCase: TrackFlightByFlightNumberUseCase,
-        trackFlightByRouteUseCase: TrackFlightByRouteUseCase
+        searchByFlightNumberUseCase: SearchByFlightNumberUseCase,
+        searchFlightByRouteUseCase: SearchFlightByRouteUseCase,
     ) = FlightViewModel(
-        trackFlightByFlightNumberUseCase = trackFlightByFlightNumberUseCase,
-        trackFlightByRouteUseCase = trackFlightByRouteUseCase
+        searchByFlightNumberUseCase = searchByFlightNumberUseCase,
+        searchFlightByRouteUseCase = searchFlightByRouteUseCase,
     )
 }

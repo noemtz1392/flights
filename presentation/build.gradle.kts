@@ -81,6 +81,8 @@ dependencies {
     implementation("androidx.compose.material:material-icons-core:1.5.4")
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
 
+    implementation("com.airbnb.android:lottie-compose:6.2.0")
+
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     testImplementation("junit:junit:4.13.2")

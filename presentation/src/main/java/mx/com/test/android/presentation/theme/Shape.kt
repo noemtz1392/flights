@@ -33,16 +33,12 @@ val shapes = Shapes(
 
 val FlightStatusShape = RoundedCornerShape(bottomEnd = 20.dp)
 
-val shapeFlightDetail = RoundedCornerShape(
+val BottomCardShape = RoundedCornerShape(
     topStart = 16.dp,
     topEnd = 16.dp,
     bottomStart = 0.dp,
     bottomEnd = 0.dp
 )
 
-val shapeDeparture = RoundedCornerShape(
-    topStart = 8.dp,
-    topEnd = 8.dp,
-    bottomStart = 8.dp,
-    bottomEnd = 8.dp
-)
+val departureShape = RoundedCornerShape(size = 8.dp)
+val arrivalShape = departureShape

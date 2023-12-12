@@ -14,3 +14,5 @@ val InTheAir = Color(0xFF1872B3)
 val OnTime = Color(0XFF2E9509)
 val Delayed = Color(0XFFFECB2F)
 val Arrived = Color(0XFF000000)
+
+val colorArrivalBackground= Color(0XFFF7F7F7)
